@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爆速ページ - 通信とIPアドレス確認</title>
+</head>
+<body style="text-align:center">
+<h3>爆速ページ - 通信とIPアドレス確認</h3>
+<p>通信出来ました</p>
+<p>IPv4: <span id="v4">未対応</span></p>
+<p>IPv6: <span id="v6">未対応</span></p>
+<p id="msg"></p>
+
+<script>
+let ip4 = '', ip6 = '';
+function check() {
+  if (ip4 && ip6) {
+    document.getElementById('msg').textContent = 'V6プラス（IPv4 over IPv6）をお使いです';
+  }
+}
+function setV4(d) {
+  if (d && d.ip && d.ip.includes('.')) {
+    ip4 = d.ip;
+    document.getElementById('v4').textContent = ip4;
+    check();
+  }
+}
+function setV6(d) {
+  if (d && d.ip && d.ip.includes(':')) {
+    ip6 = d.ip;
+    document.getElementById('v6').textContent = ip6;
+    check();
+  }
+}
+</script>
+<script src="https://ipify.org"></script>
+<script src="https://ipify.org"></script>
+</body>
+</html>
