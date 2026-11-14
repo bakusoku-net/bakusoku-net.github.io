@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爆速ページ - 通信とIPアドレス確認</title>
+</head>
+<body style="text-align:center">
+<h1>爆速ページ - 通信とIPアドレス確認</h1>
+<p>通信出来ました</p>
+<p>IPv4: <span id="v4">確認中...</span></p>
+<p>IPv6: <span id="v6">確認中...</span></p>
+
+<script>
+fetch('https://1.1.1')
+  .then(r => r.text())
+  .then(t => {
+    const ip = t.match(/ip=(.+)/)[1];
+    document.getElementById('v4').textContent = ip;
+  })
+  .catch(() => document.getElementById('v4').textContent = '未対応または取得失敗');
+
+fetch('https://2606:4700:4700::1111')
+  .then(r => r.text())
+  .then(t => {
+    const ip = t.match(/ip=(.+)/)[1];
+    document.getElementById('v6').textContent = ip;
+  })
+  .catch(() => document.getElementById('v6').textContent = '未対応（IPv4のみ）');
+</script>
+</body>
+</html>
