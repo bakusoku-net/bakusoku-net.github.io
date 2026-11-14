@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爆速ページ - 通信とIPアドレス確認</title>
+</head>
+<body style="text-align:center">
+<h3>爆速ページ - 通信とIPアドレス確認</h3>
+<p>通信出来ました</p>
+<p>IPv4: <span id="v4">確認中...</span></p>
+<p>IPv6: <span id="v6">確認中...</span></p>
+<p id="msg"></p>
+
+<script>
+Promise.all([
+  fetch('https://ident.me').then(r => r.text()).catch(() => ''),
+  fetch('https://ident.me').then(r => r.text()).catch(() => '')
+]).then(([res4, res6]) => {
+  res4 = res4.trim();
+  res6 = res6.trim();
+
+  // ドット(.)があればIPv4、コロン(:)があればIPv6と厳密に判定
+  const ipv4 = res4.includes('.') ? res4 : '';
+  const ipv6 = res6.includes(':') ? res6 : (res4.includes(':') ? res4 : '');
+
+  if (!ipv4 && ipv6) {
+    // IPv6しか取れない場合（V6プラス / IPv4 over IPv6環境）
+    document.getElementById('v4').textContent = '';
+    document.getElementById('v6').textContent = ipv6;
+    document.getElementById('msg').textContent = 'V6プラス（IPv4 over IPv6）をお使いです';
+  } else {
+    // IPv4のみ、または両方ある場合
+    document.getElementById('v4').textContent = ipv4 || '未対応';
+    document.getElementById('v6').textContent = ipv6 || '未対応';
+    document.getElementById('msg').textContent = '';
+  }
+});
+</script>
+</body>
+</html>
